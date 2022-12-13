@@ -4,7 +4,7 @@
 while [ 1 ]
 do
 sleep 1s
-wavfilenopath="$(mysql -N -e "SELECT recordingfile FROM asteriskcdrdb.cdr WHERE calldate > CURDATE() AND billsec > 0 AND recordingfile LIKE '%wav' LIMIT 1" | grep wav)"
+wavfilenopath="$(mysql --default-character-set=utf8 -N -e "SELECT recordingfile FROM asteriskcdrdb.cdr WHERE calldate > CURDATE() AND billsec > 0 AND recordingfile LIKE '%wav' LIMIT 1" | grep wav)"
 echo $wavfilenopath
 if [ -z "$wavfilenopath" ]
 then
@@ -33,13 +33,13 @@ echo $mp3file
 lame -V 6 -q 0 $wavfile $mp3file
 stat -c%s $wavfile
 stat -c%s $mp3file
-mysql -D asteriskcdrdb <<<"UPDATE cdr SET recordingfile='$mp3filenopath' WHERE recordingfile='$wavfilenopath' AND calldate > CURDATE()"
+mysql --default-character-set=utf8 -D asteriskcdrdb <<<"UPDATE cdr SET recordingfile='$mp3filenopath' WHERE recordingfile='$wavfilenopath' AND calldate > CURDATE()"
 rm -f $wavfile
 } || {
 echo "NOT FOUND WAV FILE!"
 mp3filenopath="$(echo $wavfilenopath | sed 's/wav/mp3/')"
 echo $mp3filenopath
-mysql -D asteriskcdrdb <<<"UPDATE cdr SET recordingfile='$mp3filenopath' WHERE recordingfile='$wavfilenopath' AND calldate > CURDATE()"
+mysql --default-character-set=utf8 -D asteriskcdrdb <<<"UPDATE cdr SET recordingfile='$mp3filenopath' WHERE recordingfile='$wavfilenopath' AND calldate > CURDATE()"
 }
 
 test -e "$wavfile" && {
