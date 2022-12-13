@@ -64,5 +64,3 @@ test -e "$wavfile" && {
 fi
 
 done
-
-#mysql -B -N -e "SELECT recordingfile,uniqueid FROM asteriskcdrdb.cdr WHERE calldate < CURDATE() AND recordingfile LIKE '%wav' ORDER BY calldate DESC LIMIT 1" | awk '{ wavfilenopath = $0; id = $1 }'
