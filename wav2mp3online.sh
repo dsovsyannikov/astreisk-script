@@ -4,7 +4,7 @@
 while [ 1 ]
 do
 sleep 1s
-wavfilenopath="$(mysql --default-character-set=utf8 -N -e "SELECT recordingfile FROM asteriskcdrdb.cdr WHERE calldate > CURDATE() AND billsec > 0 AND recordingfile LIKE '%wav' LIMIT 1" | grep wav)"
+wavfilenopath="$(mysql --default-character-set=utf8 -B -N -e "SELECT recordingfile FROM asteriskcdrdb.cdr WHERE calldate > CURDATE() AND billsec > 0 AND recordingfile LIKE '%wav' LIMIT 1" | grep wav)"
 echo $wavfilenopath
 if [ -z "$wavfilenopath" ]
 then
