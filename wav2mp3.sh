@@ -1,14 +1,14 @@
 #!/bin/bash
 # A Script to Convert FreePBX call recordings from WAV to MP3
 
+# delete old files
+find /var/spool/asterisk/monitor/ -type f -mtime +700 -exec rm -rf {} \;
+# delete small empty wav files
+find /var/spool/asterisk/monitor -type f -name *.wav -size -45c -delete
 # delete empty directory
 find /var/spool/asterisk/monitor/ -type d -empty -delete
 
-# delete old files
-find /var/spool/asterisk/monitor/ -type f -mtime +700 -exec rm -rf {} \;
-
-# delete small empty wav files
-find /var/spool/asterisk/monitor -type f -name *.wav -size -45c -delete
+# init uniqueid
 uid=0
 
 while [ 1 ]
