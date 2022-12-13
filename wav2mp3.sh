@@ -14,7 +14,7 @@ uid=0
 while [ 1 ]
 do
 # sleep 1s
-result="$(mysql -B -N -e "SELECT recordingfile,uniqueid,date(calldate) FROM asteriskcdrdb.cdr WHERE uniqueid >='$uid' AND calldate < CURDATE() AND recordingfile LIKE '%wav' ORDER BY uniqueid LIMIT 1")"
+result="$(mysql --default-character-set=utf8 -B -N -e "SELECT recordingfile,uniqueid,date(calldate) FROM asteriskcdrdb.cdr WHERE uniqueid >='$uid' AND calldate < CURDATE() AND recordingfile LIKE '%wav' ORDER BY uniqueid LIMIT 1")"
 echo $result
 wavfilenopath="$(echo "$result" | awk -F '\t' '{ print $1;}')"
 id="$(echo "$result" | awk -F '\t' '{ print $2;}' | sed -r 's/\..+//')"
@@ -44,7 +44,7 @@ lame -V 6 -q 0 $wavfile $mp3file
 stat -c%s $wavfile
 stat -c%s $mp3file
 # update CDR record after convert from wav to mp3
-mysql -D asteriskcdrdb <<<"UPDATE cdr SET recordingfile='$mp3filenopath' WHERE uniqueid LIKE '$id%' AND recordingfile='$wavfilenopath'"
+mysql --default-character-set=utf8 -D asteriskcdrdb <<<"UPDATE cdr SET recordingfile='$mp3filenopath' WHERE uniqueid LIKE '$id%' AND recordingfile='$wavfilenopath'"
 rm -f $wavfile
 fi
 
@@ -53,7 +53,7 @@ fi
 mp3filenopath="$(echo $wavfilenopath | sed 's/wav/mp3/')"
 echo $mp3filenopath
 # update CDR record without convert from wav to mp3
-mysql -D asteriskcdrdb <<<"UPDATE cdr SET recordingfile='$mp3filenopath' WHERE uniqueid LIKE '$id%' AND recordingfile='$wavfilenopath'"
+mysql --default-character-set=utf8 -D asteriskcdrdb <<<"UPDATE cdr SET recordingfile='$mp3filenopath' WHERE uniqueid LIKE '$id%' AND recordingfile='$wavfilenopath'"
 }
 
 test -e "$wavfile" && {
