@@ -16,7 +16,7 @@ do
 # sleep 1s
 result="$(mysql --default-character-set=utf8 -B -N -e "SELECT recordingfile,uniqueid,date(calldate) FROM asteriskcdrdb.cdr WHERE uniqueid >='$uid' AND calldate < CURDATE() AND recordingfile LIKE '%wav' ORDER BY uniqueid LIMIT 1")"
 echo $result
-wavfilenopath="$(echo "$result" | awk -F '\t' '{ print $1;}')"
+wavfilenopath="$(echo "$result" | awk -F '\t' '{ print $1;}' | sed -r 's/\x27/\\\x27/')"
 id="$(echo "$result" | awk -F '\t' '{ print $2;}' | sed -r 's/\..+//')"
 uid="$(echo "$result" | awk -F '\t' '{ print $2;}')"
 dirdate="$(echo "$result" | awk -F '\t' '{ print $3;}' | sed 's/-/\//g')"
